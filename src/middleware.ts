@@ -14,7 +14,7 @@ export async function middleware(req: NextRequest) {
   const isAuthPage = authPages.some((route) => pathname.startsWith(route));
 
   if (isProtected && !token) {
-    return NextResponse.redirect(new URL("/signin", req.url));
+    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
   if (isAuthPage && token) {
