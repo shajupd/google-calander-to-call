@@ -8,11 +8,18 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SettingsIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { updateUserBuEmail } from "@/actions/actions.server";
+import { useRouter } from "next/navigation";
 
 const SetupPhoneNumberDialog = () => {
+  const { data } = useSession();
+  const router = useRouter();
+  const [isOpen, setIsOpen] = React.useState(false);
+
   const formSchema = z.object({
-    phoneNumber: z.string().min(10, {
-      message: "Phone number must be at least 10 characters.",
+    phoneNumber: z.string().regex(/^\+\d{10,15}$/, {
+      message: 'Mobile number must start with "+" and contain 10 to 15 digits without spaces.',
     }),
   });
 
@@ -23,14 +30,32 @@ const SetupPhoneNumberDialog = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+
+    if (!data?.user?.email) {
+      return;
+    }
+
+    console.log({
+      phoneNumber: values.phoneNumber,
+      email: data?.user?.email,
+    });
+
+    try {
+      await updateUserBuEmail(data?.user?.email, {
+        phone: values.phoneNumber,
+      });
+      router.refresh();
+      setIsOpen(false);
+    } catch (error) {
+      console.log("🚀 ~ onSubmit ~ error:", error);
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">
           <SettingsIcon />

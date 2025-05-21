@@ -2,13 +2,14 @@
 import React from "react";
 import { Button } from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
-import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 const GoogleSignInButton = () => {
-  const router = useRouter();
-
-  const handleGoogleSignIn = () => {
-    router.push("/in");
+  const handleGoogleSignIn = async () => {
+    await signIn("google", {
+      redirect: true,
+      redirectTo: "/in",
+    });
   };
 
   return (
