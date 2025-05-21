@@ -16,7 +16,7 @@ const EditPhoneNumber = ({ userDetails }: EditPhoneNumberProps) => {
       </AlertTitle>
       <AlertDescription>
         <span>
-          Your cron job from email <b>shajupd@webdura.tech</b> to <b>{userDetails?.phone}</b> is active.
+          Your cron job from email <b>{userDetails?.email}</b> to <b>{userDetails?.phone}</b> is active.
         </span>
         <span className="mt-2 text-xs text-green-600">You will receive a call every 5 minutes, if you have any events in your calendar.</span>
       </AlertDescription>
