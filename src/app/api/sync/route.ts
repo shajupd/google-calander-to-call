@@ -3,7 +3,6 @@ import { TwilioService } from "@/lib/twilio.service";
 import UserModel from "@/models/user.model";
 import { GoogleCalendarUtils } from "@/utils.ts/google-calendar.utils";
 
-
 export async function GET() {
   // This is a placeholder for the actual sync logic
   // You can implement your sync logic here
@@ -13,7 +12,7 @@ export async function GET() {
   const usersWithPhoneNumbers = users.filter((user) => user.phone);
 
   if (usersWithPhoneNumbers.length > 0) {
-     Promise.all(
+    Promise.all(
       usersWithPhoneNumbers.map(async (user) => {
         const phoneNumber = user.phoneNumber;
         const email = user.email;
@@ -21,9 +20,9 @@ export async function GET() {
         const refreshToken = user.refreshToken;
 
         const events = await GoogleCalendarUtils.getEvents(accessToken, refreshToken);
-        if(events?.length){
-        console.log(`Syncing phone number ${phoneNumber} for user ${email}`);
-        await TwilioService.createCall();
+        if (events?.length) {
+          console.log(`Syncing phone number ${phoneNumber} for user ${email}`);
+          await TwilioService.createCall(phoneNumber);
         }
         // Assuming you have a function to sync the phone number
         // await syncPhoneNumber(email, phoneNumber);
