@@ -3,10 +3,17 @@ import { auth } from "@/auth/options";
 import EditPhoneNumber from "@/components/EditPhoneNumber/Index";
 import LogoutButton from "@/components/LogoutButton/Index";
 import SetupPhoneNumberDialog from "@/components/SetupPhoneNumberDialog/Index";
+import { redirect } from "next/navigation";
+
 import React from "react";
 
 const page = async () => {
   const session = await auth();
+
+  if (!session) {
+    redirect("/sign-in");
+  }
+
   let userDetails = null;
   if (session?.user?.email) {
     userDetails = await getUserByEmail(session.user.email);
