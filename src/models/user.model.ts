@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+//* eslint-disable @typescript-eslint/no-explicit-any */
 // models/User.ts
 import { getModelForClass, prop } from "@typegoose/typegoose";
 import mongoose from "mongoose";
