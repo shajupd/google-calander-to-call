@@ -14,7 +14,7 @@ export async function GET() {
   if (usersWithPhoneNumbers.length > 0) {
     Promise.all(
       usersWithPhoneNumbers.map(async (user) => {
-        const phoneNumber = user.phoneNumber;
+        const phoneNumber = user.phone;
         const email = user.email;
         const accessToken = user.accessToken;
         const refreshToken = user.refreshToken;

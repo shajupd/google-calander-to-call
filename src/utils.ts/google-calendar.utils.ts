@@ -12,7 +12,6 @@ export class GoogleCalendarUtils {
     // Get current time and 5 minutes from now
     const now = new Date();
     const fiveMinutesLater = new Date(now.getTime() + 5 * 60 * 1000);
-    //const oneMonthLater = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
     try {
       const res = await calendar.events.list({
@@ -26,7 +25,16 @@ export class GoogleCalendarUtils {
 
       const events = res.data.items || [];
 
-      return events.map((event) => ({
+      // Filter events that are starting in the next 5 minutes
+      const nextFiveMinutesEvents = events.filter((event) => {
+        if (!event.start?.dateTime) {
+          return false; // Skip events without a start dateTime
+        }
+        const eventStart = new Date(event?.start?.dateTime);
+        return eventStart >= now && eventStart <= fiveMinutesLater;
+      });
+
+      return nextFiveMinutesEvents.map((event) => ({
         id: event.id,
         summary: event.summary,
         start: event.start,
